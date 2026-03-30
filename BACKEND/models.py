@@ -10,4 +10,5 @@ class Product(Base):
     category = Column(String)
     price = Column(Float)
     moq = Column(String)
-    image = Column(String)
+    stock = Column(Integer)
+    image = Column(String)   # stores "/images/img_1.png"

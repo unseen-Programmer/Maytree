@@ -1,10 +1,14 @@
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-import shutil
-import os
-import uuid
 
+import models, schemas, crud
+from database import SessionLocal, engine
+
+# ================= CREATE TABLES =================
+models.Base.metadata.create_all(bind=engine)
+
+# ================= APP INIT =================
 app = FastAPI()
 
 # ================= CORS =================
@@ -16,76 +20,57 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ================= UPLOAD FOLDER =================
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
-
-# ================= MEMORY DATABASE =================
-products = []
+# ================= DB DEPENDENCY =================
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # ================= ROOT =================
 @app.get("/")
 def root():
     return {"message": "Backend running 🚀"}
 
-# ================= GET PRODUCTS =================
-@app.get("/products")
-def get_products():
-    return products
+# ================= GET ALL PRODUCTS =================
+@app.get("/products", response_model=list[schemas.Product])
+def get_products(db: Session = Depends(get_db)):
+    return crud.get_products(db)
 
-# ================= GET SINGLE =================
-@app.get("/products/{product_id}")
-def get_product(product_id: int):
-    for p in products:
-        if p["id"] == product_id:
-            return p
-    return {"error": "Not found"}
+# ================= GET SINGLE PRODUCT =================
+@app.get("/products/{product_id}", response_model=schemas.Product)
+def get_product(product_id: int, db: Session = Depends(get_db)):
+    products = crud.get_products(db)
+    for product in products:
+        if product.id == product_id:
+            return product
+    raise HTTPException(status_code=404, detail="Product not found")
 
-# ================= ADD PRODUCT (INSTAGRAM STYLE) =================
-@app.post("/products")
-async def create_product(
-    name: str = Form(...),
-    description: str = Form(...),
-    price: float = Form(...),
-    moq: str = Form(...),
-    stock: int = Form(...),
-    file: UploadFile = File(...)
-):
-    filename = f"{uuid.uuid4()}_{file.filename}"
-    file_path = os.path.join(UPLOAD_DIR, filename)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    image_url = f"http://127.0.0.1:8000/uploads/{filename}"
-
-    product = {
-        "id": len(products) + 1,
-        "name": name,
-        "description": description,
-        "price": price,
-        "moq": moq,
-        "stock": stock,
-        "image": image_url
-    }
-
-    products.append(product)
-    return product
+# ================= CREATE PRODUCT =================
+@app.post("/products", response_model=schemas.Product)
+def create_product(product: schemas.ProductCreate, db: Session = Depends(get_db)):
+    return crud.create_product(db, product)
 
 # ================= UPDATE STOCK =================
-@app.put("/products/{product_id}/stock")
-def update_stock(product_id: int, stock: int):
-    for p in products:
-        if p["id"] == product_id:
-            p["stock"] = stock
-            return p
-    return {"error": "Not found"}
+@app.put("/products/{product_id}/stock", response_model=schemas.Product)
+def update_stock(product_id: int, stock: int, db: Session = Depends(get_db)):
+    products = crud.get_products(db)
+    for product in products:
+        if product.id == product_id:
+            product.stock = stock
+            db.commit()
+            db.refresh(product)
+            return product
+    raise HTTPException(status_code=404, detail="Product not found")
 
-# ================= DELETE =================
+# ================= DELETE PRODUCT =================
 @app.delete("/products/{product_id}")
-def delete_product(product_id: int):
-    global products
-    products = [p for p in products if p["id"] != product_id]
-    return {"message": "Deleted"}
+def delete_product(product_id: int, db: Session = Depends(get_db)):
+    products = crud.get_products(db)
+    for product in products:
+        if product.id == product_id:
+            db.delete(product)
+            db.commit()
+            return {"message": "Deleted successfully"}
+    raise HTTPException(status_code=404, detail="Product not found")

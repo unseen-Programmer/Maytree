@@ -1,8 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useData } from '../DataContext';
-import { ArrowRight, ShieldCheck, Globe } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "framer-motion";
+import { useData } from "../DataContext";
+import { ArrowRight, ShieldCheck, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 60 },
@@ -10,8 +10,6 @@ const fadeUp = {
 };
 
 const Home = () => {
-
-  // 🔥 SAFE DATA FETCH (NO CRASH)
   const data = useData();
 
   if (!data) {
@@ -24,13 +22,11 @@ const Home = () => {
 
   const { products } = data;
 
-  // 🔥 FALLBACK (since backend has no homeContent)
   const homeContent = {
     heroTitle: "Premium Tea & Spices",
     heroSubtitle: "Export quality crafted with precision & care."
   };
 
-  // 🔥 SAFE PRODUCTS
   const featuredProducts = products || [];
 
   return (
@@ -44,7 +40,7 @@ const Home = () => {
           className="absolute inset-0 w-full h-full object-cover opacity-40"
           initial={{ scale: 1.2 }}
           animate={{ scale: 1 }}
-          transition={{ duration: 8, ease: 'easeOut' }}
+          transition={{ duration: 8, ease: "easeOut" }}
         />
 
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
@@ -106,7 +102,6 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {/* 🔥 GRID */}
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
 
             {featuredProducts.length === 0 ? (
@@ -114,53 +109,63 @@ const Home = () => {
                 No products available
               </p>
             ) : (
-              featuredProducts.map((product, idx) => (
-                <motion.div
-                  key={product.id}
-                  initial="hidden"
-                  whileInView="show"
-                  variants={fadeUp}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden hover:scale-[1.03] hover:shadow-2xl hover:shadow-gold-900/20 transition duration-500"
-                >
+              featuredProducts.map((product: any, idx: number) => {
+                
+                // ✅ SAFE IMAGE
+                const safeImage = product.image?.trim()
+                  ? product.image
+                  : "/images/img_1.png";
 
-                  {/* IMAGE */}
-                  <div className="h-72 overflow-hidden">
-                    <img
-                      src={product.image || "/images/img_1.png"}
-                      alt={product.name}
-                      className="w-full h-full object-cover transition duration-700 hover:scale-110"
-                    />
-                  </div>
+                return (
+                  <motion.div
+                    key={product.id}
+                    initial="hidden"
+                    whileInView="show"
+                    variants={fadeUp}
+                    transition={{ delay: idx * 0.1 }}
+                    className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden hover:scale-[1.03] hover:shadow-2xl hover:shadow-gold-900/20 transition duration-500"
+                  >
 
-                  {/* CONTENT */}
-                  <div className="p-6">
-                    <h3 className="text-2xl font-serif text-gold mb-2">
-                      {product.name}
-                    </h3>
-
-                    <p className="text-neutral-400 text-sm mb-4">
-                      {product.description}
-                    </p>
-
-                    <div className="flex justify-between border-t border-white/10 pt-4 text-sm">
-                      <span>MOQ: {product.moq}</span>
-                      <span className="text-gold-400 font-bold">
-                        ${product.price}/kg
-                      </span>
+                    {/* IMAGE */}
+                    <div className="h-72 overflow-hidden">
+                      <img
+                        src={safeImage}
+                        alt={product.name}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "/images/img_1.png";
+                        }}
+                        className="w-full h-full object-cover transition duration-700 hover:scale-110"
+                      />
                     </div>
 
-                    {/* 🔥 CLICK TO DETAILS */}
-                    <Link
-                      to={`/product/${product.id}`}
-                      className="block mt-4 text-center text-sm text-gold-400 hover:underline"
-                    >
-                      View Details →
-                    </Link>
-                  </div>
+                    {/* CONTENT */}
+                    <div className="p-6">
+                      <h3 className="text-2xl font-serif text-gold mb-2">
+                        {product.name}
+                      </h3>
 
-                </motion.div>
-              ))
+                      <p className="text-neutral-400 text-sm mb-4">
+                        {product.description}
+                      </p>
+
+                      <div className="flex justify-between border-t border-white/10 pt-4 text-sm">
+                        <span>MOQ: {product.moq}</span>
+                        <span className="text-gold-400 font-bold">
+                          ${product.price}/kg
+                        </span>
+                      </div>
+
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="block mt-4 text-center text-sm text-gold-400 hover:underline"
+                      >
+                        View Details →
+                      </Link>
+                    </div>
+
+                  </motion.div>
+                );
+              })
             )}
 
           </div>
@@ -186,18 +191,18 @@ const Home = () => {
             {[
               {
                 icon: <ArrowRight />,
-                title: 'Enquiry',
-                desc: 'Submit requirements for bulk production.'
+                title: "Enquiry",
+                desc: "Submit requirements for bulk production."
               },
               {
                 icon: <ShieldCheck />,
-                title: 'Quality Check',
-                desc: 'Strict inspection ensures export-grade quality.'
+                title: "Quality Check",
+                desc: "Strict inspection ensures export-grade quality."
               },
               {
                 icon: <Globe />,
-                title: 'Processing & Packaging',
-                desc: 'Advanced processing and premium packaging.'
+                title: "Processing & Packaging",
+                desc: "Advanced processing and premium packaging."
               }
             ].map((step, idx) => (
               <motion.div
@@ -227,10 +232,7 @@ const Home = () => {
 
       {/* ================= CTA ================= */}
       <section className="py-32 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }}>
           <h2 className="text-5xl md:text-6xl font-serif text-gold mb-6">
             Let’s Build Something Premium
           </h2>

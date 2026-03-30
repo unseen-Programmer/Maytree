@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-const API = "http://127.0.0.1:8000";
-const ADMIN_KEY = "12345"; // 🔐 change this
+const API = "https://maytree.onrender.com";
+const ADMIN_KEY = "12345";
 
 const Admin = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [keyInput, setKeyInput] = useState("");
 
   const [products, setProducts] = useState<any[]>([]);
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState("");
 
   const [form, setForm] = useState({
     name: "",
     description: "",
     price: "",
     moq: "",
-    stock: ""
+    stock: "",
+    image: "/images/img_1.png" // ✅ DEFAULT IMAGE
   });
 
   // ================= LOGIN =================
@@ -45,22 +44,28 @@ const Admin = () => {
 
   // ================= ADD PRODUCT =================
   const handleSubmit = async () => {
-    if (!file) return alert("Upload image");
-
-    const formData = new FormData();
-    Object.entries(form).forEach(([k, v]) => formData.append(k, v));
-    formData.append("file", file);
-
     await fetch(`${API}/products`, {
       method: "POST",
-      body: formData
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...form,
+        price: Number(form.price),
+        stock: Number(form.stock),
+      }),
     });
 
     alert("Product added 🚀");
 
-    setForm({ name: "", description: "", price: "", moq: "", stock: "" });
-    setFile(null);
-    setPreview("");
+    setForm({
+      name: "",
+      description: "",
+      price: "",
+      moq: "",
+      stock: "",
+      image: "/images/img_1.png", // reset default
+    });
 
     loadProducts();
   };
@@ -74,7 +79,7 @@ const Admin = () => {
   // ================= UPDATE STOCK =================
   const updateStock = async (id: number, stock: number) => {
     await fetch(`${API}/products/${id}/stock?stock=${stock}`, {
-      method: "PUT"
+      method: "PUT",
     });
     loadProducts();
   };
@@ -83,9 +88,7 @@ const Admin = () => {
   if (!isAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-neutral-950 text-white px-4">
-
         <div className="bg-white/5 p-8 rounded-2xl border border-white/10 w-full max-w-md">
-
           <h2 className="text-2xl mb-6 text-center font-serif">
             Admin Access
           </h2>
@@ -100,11 +103,10 @@ const Admin = () => {
 
           <button
             onClick={handleLogin}
-            className="w-full bg-gold-600 text-black py-3 rounded font-bold hover:bg-gold-500 transition"
+            className="w-full bg-gold-600 text-black py-3 rounded font-bold hover:bg-gold-500"
           >
             Login
           </button>
-
         </div>
       </div>
     );
@@ -113,7 +115,6 @@ const Admin = () => {
   // ================= DASHBOARD =================
   return (
     <div className="pt-32 pb-24 min-h-screen bg-neutral-950 text-white">
-
       <div className="max-w-7xl mx-auto px-6">
 
         <h1 className="text-4xl font-serif mb-10">
@@ -127,43 +128,63 @@ const Admin = () => {
 
             <h2 className="text-lg">Add Product</h2>
 
-            <input placeholder="Name"
+            <input
+              placeholder="Name"
               value={form.name}
               onChange={e => setForm({ ...form, name: e.target.value })}
-              className="w-full p-3 bg-black/40 rounded" />
-
-            <textarea placeholder="Description"
-              value={form.description}
-              onChange={e => setForm({ ...form, description: e.target.value })}
-              className="w-full p-3 bg-black/40 rounded" />
-
-            <input placeholder="Price"
-              value={form.price}
-              onChange={e => setForm({ ...form, price: e.target.value })}
-              className="w-full p-3 bg-black/40 rounded" />
-
-            <input placeholder="MOQ"
-              value={form.moq}
-              onChange={e => setForm({ ...form, moq: e.target.value })}
-              className="w-full p-3 bg-black/40 rounded" />
-
-            <input placeholder="Stock"
-              value={form.stock}
-              onChange={e => setForm({ ...form, stock: e.target.value })}
-              className="w-full p-3 bg-black/40 rounded" />
-
-            <input
-              type="file"
-              onChange={(e) => {
-                const f = e.target.files![0];
-                setFile(f);
-                setPreview(URL.createObjectURL(f));
-              }}
+              className="w-full p-3 bg-black/40 rounded"
             />
 
-            {preview && (
-              <img src={preview} className="w-full h-40 object-cover rounded" />
-            )}
+            <textarea
+              placeholder="Description"
+              value={form.description}
+              onChange={e => setForm({ ...form, description: e.target.value })}
+              className="w-full p-3 bg-black/40 rounded"
+            />
+
+            <input
+              placeholder="Price"
+              value={form.price}
+              onChange={e => setForm({ ...form, price: e.target.value })}
+              className="w-full p-3 bg-black/40 rounded"
+            />
+
+            <input
+              placeholder="MOQ"
+              value={form.moq}
+              onChange={e => setForm({ ...form, moq: e.target.value })}
+              className="w-full p-3 bg-black/40 rounded"
+            />
+
+            <input
+              placeholder="Stock"
+              value={form.stock}
+              onChange={e => setForm({ ...form, stock: e.target.value })}
+              className="w-full p-3 bg-black/40 rounded"
+            />
+
+            {/* ✅ IMAGE SELECT DROPDOWN */}
+            <select
+              value={form.image}
+              onChange={(e) =>
+                setForm({ ...form, image: e.target.value })
+              }
+              className="w-full p-3 bg-black/40 rounded"
+            >
+              <option value="/images/img_1.png">img_1.png</option>
+              <option value="/images/img_2.png">img_2.png</option>
+              <option value="/images/img_3.png">img_3.png</option>
+              <option value="/images/img_4.png">img_4.png</option>
+              <option value="/images/img_5.png">img_5.png</option>
+              <option value="/images/bora.png">bora.png</option>
+              <option value="/images/logo.png">logo.png</option>
+            </select>
+
+            {/* ✅ IMAGE PREVIEW */}
+            <img
+              src={form.image}
+              className="w-full h-40 object-cover rounded"
+            />
 
             <button
               onClick={handleSubmit}

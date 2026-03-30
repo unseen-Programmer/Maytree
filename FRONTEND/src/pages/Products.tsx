@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useData } from '../DataContext';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useData } from "../DataContext";
 
 const Products = () => {
   const data = useData();
 
-  // 🔥 SAFE CHECK (prevents crash)
+  // 🔥 SAFE CHECK
   if (!data || !data.products) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-neutral-950 text-white">
@@ -18,7 +18,6 @@ const Products = () => {
 
   return (
     <div className="pt-32 pb-24 min-h-screen bg-neutral-950">
-      
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
 
         {products.length === 0 ? (
@@ -31,10 +30,13 @@ const Products = () => {
 
               <div className="bg-neutral-900 border border-white/10 rounded-xl overflow-hidden hover:scale-105 transition duration-300">
 
-                {/* IMAGE */}
+                {/* ✅ IMAGE FIX */}
                 <img
-                  src={product.image || "/images/img_1.png"}
+                  src={product.image?.trim() ? product.image : "/images/img_1.png"}
                   alt={product.name}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/images/img_1.png";
+                  }}
                   className="w-full h-64 object-cover"
                 />
 

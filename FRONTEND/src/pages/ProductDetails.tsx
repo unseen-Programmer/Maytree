@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchProductById } from '../services/api';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { fetchProductById } from "../services/api";
 
 import {
   FaWhatsapp,
@@ -50,6 +50,13 @@ const ProductDetails = () => {
     );
   }
 
+  // ✅ SAFE VALUES
+  const safeImage = product.image?.trim()
+    ? product.image
+    : "/images/img_1.png";
+
+  const safeStock = Number(product.stock) || 0;
+
   // ✅ WhatsApp setup
   const phone = "916002777840";
   const message = `Hello, I'm interested in ${product.name}`;
@@ -63,15 +70,20 @@ const ProductDetails = () => {
         {/* IMAGE */}
         <div className="relative group">
           <img
-            src={product.image || "/images/img_1.png"}
+            src={safeImage}
             alt={product.name}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/images/img_1.png";
+            }}
             className="rounded-2xl shadow-xl w-full h-[500px] object-cover group-hover:scale-105 transition duration-500"
           />
 
           {/* STOCK BADGE */}
-          <div className={`absolute top-4 left-4 px-4 py-2 rounded-full text-sm font-semibold 
-            ${product.stock > 0 ? "bg-green-500" : "bg-red-500"}`}>
-            {product.stock > 0 ? "In Stock" : "Out of Stock"}
+          <div
+            className={`absolute top-4 left-4 px-4 py-2 rounded-full text-sm font-semibold 
+            ${safeStock > 0 ? "bg-green-500" : "bg-red-500"}`}
+          >
+            {safeStock > 0 ? "In Stock" : "Out of Stock"}
           </div>
         </div>
 
