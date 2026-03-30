@@ -10,10 +10,28 @@ const fadeUp = {
 };
 
 const Home = () => {
-  const { homeContent, products } = useData();
 
-  // ✅ SHOW ALL PRODUCTS (FIXED)
-  const featuredProducts = products;
+  // 🔥 SAFE DATA FETCH (NO CRASH)
+  const data = useData();
+
+  if (!data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white bg-neutral-950">
+        Loading...
+      </div>
+    );
+  }
+
+  const { products } = data;
+
+  // 🔥 FALLBACK (since backend has no homeContent)
+  const homeContent = {
+    heroTitle: "Premium Tea & Spices",
+    heroSubtitle: "Export quality crafted with precision & care."
+  };
+
+  // 🔥 SAFE PRODUCTS
+  const featuredProducts = products || [];
 
   return (
     <div className="pt-20 bg-neutral-950 text-white overflow-hidden">
@@ -88,48 +106,62 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {/* 🔥 GRID FIXED (RESPONSIVE) */}
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10">
+          {/* 🔥 GRID */}
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
 
-            {featuredProducts.map((product, idx) => (
-              <motion.div
-                key={product.id}
-                initial="hidden"
-                whileInView="show"
-                variants={fadeUp}
-                transition={{ delay: idx * 0.1 }}
-                className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden hover:scale-[1.03] hover:shadow-2xl hover:shadow-gold-900/20 transition duration-500"
-              >
+            {featuredProducts.length === 0 ? (
+              <p className="text-center text-neutral-500 col-span-full">
+                No products available
+              </p>
+            ) : (
+              featuredProducts.map((product, idx) => (
+                <motion.div
+                  key={product.id}
+                  initial="hidden"
+                  whileInView="show"
+                  variants={fadeUp}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden hover:scale-[1.03] hover:shadow-2xl hover:shadow-gold-900/20 transition duration-500"
+                >
 
-                {/* IMAGE */}
-                <div className="h-72 overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition duration-700 hover:scale-110"
-                  />
-                </div>
-
-                {/* CONTENT */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-serif text-gold mb-2">
-                    {product.name}
-                  </h3>
-
-                  <p className="text-neutral-400 text-sm mb-4">
-                    {product.description}
-                  </p>
-
-                  <div className="flex justify-between border-t border-white/10 pt-4 text-sm">
-                    <span>MOQ: {product.moq}</span>
-                    <span className="text-gold-400 font-bold">
-                      ${product.price}/kg
-                    </span>
+                  {/* IMAGE */}
+                  <div className="h-72 overflow-hidden">
+                    <img
+                      src={product.image || "/images/img_1.png"}
+                      alt={product.name}
+                      className="w-full h-full object-cover transition duration-700 hover:scale-110"
+                    />
                   </div>
-                </div>
 
-              </motion.div>
-            ))}
+                  {/* CONTENT */}
+                  <div className="p-6">
+                    <h3 className="text-2xl font-serif text-gold mb-2">
+                      {product.name}
+                    </h3>
+
+                    <p className="text-neutral-400 text-sm mb-4">
+                      {product.description}
+                    </p>
+
+                    <div className="flex justify-between border-t border-white/10 pt-4 text-sm">
+                      <span>MOQ: {product.moq}</span>
+                      <span className="text-gold-400 font-bold">
+                        ${product.price}/kg
+                      </span>
+                    </div>
+
+                    {/* 🔥 CLICK TO DETAILS */}
+                    <Link
+                      to={`/product/${product.id}`}
+                      className="block mt-4 text-center text-sm text-gold-400 hover:underline"
+                    >
+                      View Details →
+                    </Link>
+                  </div>
+
+                </motion.div>
+              ))
+            )}
 
           </div>
 
