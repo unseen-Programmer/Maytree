@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { useData } from "../DataContext";
 import { ArrowRight, ShieldCheck, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
+import { products } from "../data/products";// ⚠️ fix if filename is products.ts
 
 const fadeUp = {
   hidden: { opacity: 0, y: 60 },
@@ -10,24 +10,13 @@ const fadeUp = {
 };
 
 const Home = () => {
-  const data = useData();
-
-  if (!data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white bg-neutral-950">
-        Loading...
-      </div>
-    );
-  }
-
-  const { products } = data;
 
   const homeContent = {
     heroTitle: "Premium Tea & Spices",
     heroSubtitle: "Export quality crafted with precision & care."
   };
 
-  const featuredProducts = products || [];
+  const featuredProducts = products.slice(0, 3); // 🔥 TOP 3
 
   return (
     <div className="pt-20 bg-neutral-950 text-white overflow-hidden">
@@ -43,8 +32,10 @@ const Home = () => {
           transition={{ duration: 8, ease: "easeOut" }}
         />
 
+        {/* DARK GRADIENT */}
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
 
+        {/* CONTENT */}
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <motion.div
             initial="hidden"
@@ -61,7 +52,7 @@ const Home = () => {
               {homeContent.heroTitle}
             </h1>
 
-            <p className="text-lg text-neutral-400 mt-6 mb-10">
+            <p className="text-lg text-neutral-300 mt-6 mb-10">
               {homeContent.heroSubtitle}
             </p>
 
@@ -84,89 +75,81 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= PRODUCTS ================= */}
+      {/* ================= FEATURED PRODUCTS ================= */}
       <section className="py-28">
         <div className="max-w-7xl mx-auto px-6">
 
           <motion.div
-            initial="hidden"
-            whileInView="show"
-            variants={fadeUp}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             className="text-center mb-20"
           >
             <h2 className="text-5xl font-serif text-gold mb-4">
-              Our Products
+              Featured Products
             </h2>
             <p className="text-neutral-400">
-              Premium quality crafted with precision & care.
+              Top quality selections curated for you
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-3 gap-10">
 
-            {featuredProducts.length === 0 ? (
-              <p className="text-center text-neutral-500 col-span-full">
-                No products available
-              </p>
-            ) : (
-              featuredProducts.map((product: any, idx: number) => {
-                
-                // ✅ SAFE IMAGE
-                const safeImage = product.image?.trim()
-                  ? product.image
-                  : "/images/img_1.png";
+            {featuredProducts.map((product, idx) => {
 
-                return (
-                  <motion.div
-                    key={product.id}
-                    initial="hidden"
-                    whileInView="show"
-                    variants={fadeUp}
-                    transition={{ delay: idx * 0.1 }}
-                    className="bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden hover:scale-[1.03] hover:shadow-2xl hover:shadow-gold-900/20 transition duration-500"
-                  >
+              const safeImage = product.image?.trim()
+                ? product.image
+                : "/images/img_1.png";
 
-                    {/* IMAGE */}
-                    <div className="h-72 overflow-hidden">
-                      <img
-                        src={safeImage}
-                        alt={product.name}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/images/img_1.png";
-                        }}
-                        className="w-full h-full object-cover transition duration-700 hover:scale-110"
-                      />
+              return (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 80 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.15 }}
+                  className="group bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:scale-[1.05] transition duration-500 hover:shadow-2xl hover:shadow-gold-900/20"
+                >
+
+                  {/* IMAGE */}
+                  <div className="h-64 overflow-hidden">
+                    <img
+                      src={safeImage}
+                      alt={product.name}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/img_1.png";
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                    />
+                  </div>
+
+                  {/* CONTENT */}
+                  <div className="p-6">
+                    <h3 className="text-xl font-serif text-gold mb-2">
+                      {product.name}
+                    </h3>
+
+                    <p className="text-neutral-400 text-sm mb-3 line-clamp-2">
+                      {product.description}
+                    </p>
+
+                    <div className="flex justify-between border-t border-white/10 pt-3 text-sm">
+                      <span>{product.moq}</span>
+                      <span className="text-gold-400 font-bold">
+                        ${product.price}
+                      </span>
                     </div>
 
-                    {/* CONTENT */}
-                    <div className="p-6">
-                      <h3 className="text-2xl font-serif text-gold mb-2">
-                        {product.name}
-                      </h3>
+                    <Link
+                      to={`/product/${product.id}`}
+                      className="block mt-4 text-center py-2 rounded-lg bg-gold-500 text-black font-semibold hover:bg-gold-400 transition"
+                    >
+                      View Details
+                    </Link>
+                  </div>
 
-                      <p className="text-neutral-400 text-sm mb-4">
-                        {product.description}
-                      </p>
-
-                      <div className="flex justify-between border-t border-white/10 pt-4 text-sm">
-                        <span>MOQ: {product.moq}</span>
-                        <span className="text-gold-400 font-bold">
-                          ${product.price}/kg
-                        </span>
-                      </div>
-
-                      <Link
-                        to={`/product/${product.id}`}
-                        className="block mt-4 text-center text-sm text-gold-400 hover:underline"
-                      >
-                        View Details →
-                      </Link>
-                    </div>
-
-                  </motion.div>
-                );
-              })
-            )}
+                </motion.div>
+              );
+            })}
 
           </div>
 
@@ -228,26 +211,6 @@ const Home = () => {
 
           </div>
         </div>
-      </section>
-
-      {/* ================= CTA ================= */}
-      <section className="py-32 text-center">
-        <motion.div initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }}>
-          <h2 className="text-5xl md:text-6xl font-serif text-gold mb-6">
-            Let’s Build Something Premium
-          </h2>
-
-          <p className="text-neutral-400 mb-10">
-            Partner with a trusted manufacturer today.
-          </p>
-
-          <Link
-            to="/contact"
-            className="px-12 py-5 bg-gold-600 text-black font-bold uppercase tracking-widest hover:bg-gold-500 transition"
-          >
-            Request Quote
-          </Link>
-        </motion.div>
       </section>
 
     </div>

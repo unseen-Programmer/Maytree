@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { fetchProductById } from "../services/api";
+import { products } from "../data/products";
 
 import {
   FaWhatsapp,
@@ -12,34 +12,9 @@ import {
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!id) return;
-
-    const loadProduct = async () => {
-      try {
-        const data = await fetchProductById(id);
-        setProduct(data);
-      } catch (err) {
-        console.error("Failed to load product", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProduct();
-  }, [id]);
-
-  // 🔥 LOADING
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-950 text-white">
-        Loading product...
-      </div>
-    );
-  }
+  // ✅ FIND PRODUCT FROM STATIC DATA
+  const product = products.find((p) => p.id === Number(id));
 
   // 🔥 ERROR
   if (!product) {
@@ -63,7 +38,7 @@ const ProductDetails = () => {
   const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-neutral-950 text-white">
+    <div className="pt-32 pb-24 min-h-screen bg-gradient-to-b from-neutral-950 to-black text-white">
 
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
 
@@ -75,12 +50,12 @@ const ProductDetails = () => {
             onError={(e) => {
               (e.target as HTMLImageElement).src = "/images/img_1.png";
             }}
-            className="rounded-2xl shadow-xl w-full h-[500px] object-cover group-hover:scale-105 transition duration-500"
+            className="rounded-2xl shadow-2xl w-full h-[500px] object-cover group-hover:scale-105 transition duration-500"
           />
 
           {/* STOCK BADGE */}
           <div
-            className={`absolute top-4 left-4 px-4 py-2 rounded-full text-sm font-semibold 
+            className={`absolute top-4 left-4 px-4 py-2 rounded-full text-sm font-semibold shadow-lg
             ${safeStock > 0 ? "bg-green-500" : "bg-red-500"}`}
           >
             {safeStock > 0 ? "In Stock" : "Out of Stock"}
@@ -94,14 +69,14 @@ const ProductDetails = () => {
             {product.name}
           </h1>
 
-          <p className="text-neutral-400 mb-8 leading-relaxed">
+          <p className="text-neutral-400 mb-8 leading-relaxed text-lg">
             {product.description}
           </p>
 
           {/* INFO CARDS */}
           <div className="grid grid-cols-2 gap-4 mb-8">
 
-            <div className="bg-neutral-900 border border-white/10 p-6 rounded-xl flex items-center gap-3">
+            <div className="bg-neutral-900/70 backdrop-blur border border-white/10 p-6 rounded-xl flex items-center gap-3">
               <FaDollarSign className="text-gold-400" />
               <div>
                 <p className="text-sm text-neutral-400">Price</p>
@@ -111,7 +86,7 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            <div className="bg-neutral-900 border border-white/10 p-6 rounded-xl flex items-center gap-3">
+            <div className="bg-neutral-900/70 backdrop-blur border border-white/10 p-6 rounded-xl flex items-center gap-3">
               <FaBoxOpen className="text-gold-400" />
               <div>
                 <p className="text-sm text-neutral-400">MOQ</p>

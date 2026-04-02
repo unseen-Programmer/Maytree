@@ -1,70 +1,80 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useData } from "../DataContext";
+import { products } from "../data/products";
 
 const Products = () => {
-  const data = useData();
-
-  // 🔥 SAFE CHECK
-  if (!data || !data.products) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-950 text-white">
-        Loading products...
-      </div>
-    );
-  }
-
-  const { products } = data;
-
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-neutral-950">
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+    <div className="pt-32 pb-24 min-h-screen bg-gradient-to-b from-neutral-950 to-black text-white">
 
-        {products.length === 0 ? (
-          <p className="text-center text-neutral-500 col-span-full">
-            No products available
-          </p>
-        ) : (
-          products.map((product: any) => (
-            <Link to={`/product/${product.id}`} key={product.id}>
+      {/* HEADER */}
+      <div className="text-center mb-16">
+        <h1 className="text-5xl font-serif text-gold-300 mb-4">
+          Our Products
+        </h1>
+        <p className="text-neutral-400 text-sm">
+          Premium quality tea & agro products crafted for excellence
+        </p>
+      </div>
 
-              <div className="bg-neutral-900 border border-white/10 rounded-xl overflow-hidden hover:scale-105 transition duration-300">
+      {/* GRID */}
+      <div className="max-w-7xl mx-auto px-6 grid sm:grid-cols-2 md:grid-cols-3 gap-10">
 
-                {/* ✅ IMAGE FIX */}
+        {products.map((product) => (
+          <Link to={`/product/${product.id}`} key={product.id}>
+
+            <div className="group bg-neutral-900/60 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:scale-[1.04] transition duration-500 hover:shadow-2xl hover:shadow-gold-900/20">
+
+              {/* IMAGE */}
+              <div className="h-72 overflow-hidden">
                 <img
-                  src={product.image?.trim() ? product.image : "/images/img_1.png"}
+                  src={product.image}
                   alt={product.name}
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = "/images/img_1.png";
                   }}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
                 />
+              </div>
 
-                {/* CONTENT */}
-                <div className="p-6">
-                  <h3 className="text-xl text-gold-200 font-serif">
-                    {product.name}
-                  </h3>
+              {/* CONTENT */}
+              <div className="p-6">
 
-                  <p className="text-neutral-400 text-sm mt-2">
-                    {product.description}
-                  </p>
+                <h3 className="text-2xl font-serif text-gold-200 mb-2">
+                  {product.name}
+                </h3>
 
-                  <div className="flex justify-between mt-4 text-sm">
-                    <span>{product.moq}</span>
-                    <span className="text-gold-400 font-bold">
-                      ${product.price}/kg
-                    </span>
-                  </div>
+                <p className="text-neutral-400 text-sm mb-4 line-clamp-2">
+                  {product.description}
+                </p>
+
+                <div className="flex justify-between items-center border-t border-white/10 pt-4">
+
+                  <span className="text-xs text-neutral-400">
+                    MOQ: {product.moq}
+                  </span>
+
+                  <span className="text-lg font-bold text-gold-400">
+                    ${product.price}/kg
+                  </span>
+
+                </div>
+
+                {/* BUTTON */}
+                <div className="mt-6">
+                  <button className="w-full py-3 rounded-lg bg-gradient-to-r from-gold-500 to-gold-600 text-black font-semibold hover:opacity-90 transition">
+                    View Details
+                  </button>
                 </div>
 
               </div>
 
-            </Link>
-          ))
-        )}
+            </div>
+
+          </Link>
+        ))}
 
       </div>
+
     </div>
   );
 };
