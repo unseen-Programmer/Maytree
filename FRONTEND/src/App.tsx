@@ -90,12 +90,12 @@ export default function App() {
                 </p>
                 
                 <div className="flex items-center gap-8">
-                  <Link 
-                    to="/admin" 
-                    className="text-[9px] text-neutral-700 hover:text-gold-600 uppercase tracking-[0.3em] transition-colors"
-                  >
-                    Admin Portal
-                  </Link>
+                  {/* <Link 
+                  //   to="/admin" 
+                  //   className="text-[9px] text-neutral-700 hover:text-gold-600 uppercase tracking-[0.3em] transition-colors"
+                  // >
+                  //   Admin Portal
+                  </Link> */}
                   <span className="text-neutral-800 font-thin">|</span>
                   <span className="text-[9px] text-neutral-700 uppercase tracking-[0.3em]">
                     Assam, India
