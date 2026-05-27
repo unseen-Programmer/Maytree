@@ -178,6 +178,8 @@ const Admin = () => {
               <option value="/images/img_5.png">img_5.png</option>
               <option value="/images/bora.png">bora.png</option>
               <option value="/images/logo.png">logo.png</option>
+             <option value="/images/img_6.png">img_6.png</option>
+
             </select>
 
             {/* ✅ IMAGE PREVIEW */}

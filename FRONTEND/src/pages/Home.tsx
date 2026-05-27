@@ -132,11 +132,8 @@ const Home = () => {
                       {product.description}
                     </p>
 
-                    <div className="flex justify-between border-t border-white/10 pt-3 text-sm">
-                      <span>{product.moq}</span>
-                      <span className="text-gold-400 font-bold">
-                        ${product.price}
-                      </span>
+                    <div className="border-t border-white/10 pt-3 text-sm text-center">
+                      <span>MOQ: {product.moq}</span>
                     </div>
 
                     <Link

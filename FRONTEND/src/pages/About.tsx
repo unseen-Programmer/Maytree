@@ -100,9 +100,9 @@ const About = () => {
             <div className="absolute inset-0 border border-yellow-500/20 translate-x-6 translate-y-6 rounded-2xl -z-10" />
 
             <img
-              src="https://images.unsplash.com/photo-1597481499750-3e6b22637e12"
-              alt="Assam Tea Garden"
-              className="rounded-2xl shadow-2xl object-cover w-full aspect-[4/5] grayscale-[20%] hover:grayscale-0 transition duration-700"
+              src="/images/about-hero.png"
+              alt="Maitrayee Tea and Agro Manufacturing"
+              className="w-full h-[650px] object-cover rounded-[24px] shadow-2xl border border-[#b68d40]/20"
             />
 
             <div className="absolute -bottom-10 -left-10 bg-neutral-900/90 backdrop-blur-md p-8 rounded-xl border border-white/10 hidden md:block">

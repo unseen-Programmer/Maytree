@@ -2,46 +2,50 @@ export const products = [
   {
     id: 1,
     name: "Premium Green Tea",
-    description: "Fresh Assam green tea leaves",
-    price: 200,
-    moq: "10kg",
-    stock: 50,
+    description: "Freshly processed Assam green tea leaves suitable for bulk supply and manufacturing.",
+    moq: "50kg",
     image: "/images/img_1.png"
   },
   {
     id: 2,
-    name: "Classic Black Tea",
-    description: "Strong and aromatic black tea",
-    price: 180,
-    moq: "20kg",
-    stock: 40,
+    name: "Premium Orthodox Tea",
+    description: "High-quality orthodox tea with rich aroma and premium leaf selection.",
+    moq: "50kg",
     image: "/images/img_2.png"
   },
   {
     id: 3,
-    name: "Organic Spice Mix",
-    description: "Natural spice blend for rich flavor",
-    price: 300,
-    moq: "5kg",
-    stock: 25,
+    name: "Oven Dry King Chilli Powder",
+    description: "Finely processed king chilli powder prepared using controlled oven drying.",
+    moq: "50kg",
     image: "/images/img_3.png"
   },
   {
     id: 4,
-    name: "Herbal Tea Blend",
-    description: "Healthy herbal infusion mix",
-    price: 220,
-    moq: "8kg",
-    stock: 35,
+    name: "Smoke Dry King Chilli",
+    description: "Traditional smoked king chilli processed for strong flavor and long shelf life.",
+    moq: "50kg",
     image: "/images/img_4.png"
   },
   {
     id: 5,
-    name: "Premium Export Tea",
-    description: "High-quality tea for export markets",
-    price: 350,
-    moq: "15kg",
-    stock: 20,
+    name: "Oven Dry King Chilli Flakes",
+    description: "Premium quality dried king chilli flakes for food processing and export.",
+    moq: "50kg",
     image: "/images/img_5.png"
+  },
+  {
+    id: 6,
+    name: "Classic Green Tea",
+    description: "Classic green tea made from selected tea leaves with natural freshness.",
+    moq: "50kg",
+    image: "/images/img_7.png"
+  },
+  {
+    id: 7,
+    name: "Fresh King Chilli Pulp",
+    description: "Freshly processed king chilli pulp suitable for sauces and food manufacturing.",
+    moq: "50kg",
+    image: "/images/img_6.png"
   }
 ];

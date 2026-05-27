@@ -47,14 +47,10 @@ const Products = () => {
                   {product.description}
                 </p>
 
-                <div className="flex justify-between items-center border-t border-white/10 pt-4">
+                <div className="border-t border-white/10 pt-4 text-center">
 
                   <span className="text-xs text-neutral-400">
                     MOQ: {product.moq}
-                  </span>
-
-                  <span className="text-lg font-bold text-gold-400">
-                    ${product.price}/kg
                   </span>
 
                 </div>

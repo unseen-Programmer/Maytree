@@ -54,7 +54,7 @@ const Navbar = () => {
 
           <div className="flex flex-col leading-tight">
             <span className="font-serif text-lg md:text-xl font-bold tracking-wider uppercase text-gold-200">
-              Maytree
+              Maitrayee
             </span>
             <span className="text-xs tracking-[0.3em] text-gold-500 uppercase">
               Tea & Agro
