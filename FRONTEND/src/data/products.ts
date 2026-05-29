@@ -49,7 +49,7 @@ export const products = [
     image: "/images/img_6.png"
   },
   {
-    id: 7,
+    id: 8,
     name: "Oven dry king chilli",
     description: "Premium oven-dried King Chilli flakes with intense heat, rich aroma, and natural flavor, ideal for spice blends, seasonings, sauces, and food manufacturing applications.",
     moq: "50kg",
