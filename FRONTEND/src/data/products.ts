@@ -54,6 +54,13 @@ export const products = [
     description: "Premium oven-dried King Chilli flakes with intense heat, rich aroma, and natural flavor, ideal for spice blends, seasonings, sauces, and food manufacturing applications.",
     moq: "50kg",
     image: "/images/img_8.png"
+  },
+   {
+    id: 9,
+    name: "Classic Orthodox Tea",
+    description: "Classic Orthodox Tea is a premium whole-leaf tea crafted using traditional methods, offering a rich aroma, smooth flavor, and authentic tea experience.",
+    moq: "50kg",
+    image: "/images/img_10.png"
   }
 
 ];
