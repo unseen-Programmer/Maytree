@@ -44,8 +44,16 @@ export const products = [
   {
     id: 7,
     name: "Fresh King Chilli Pulp",
-    description: "Freshly processed king chilli pulp suitable for sauces and food manufacturing.",
+    description: "Freshly processed King Chilli pulp for sauces and food manufacturing, made with 0% preservatives and offering up to 1 year shelf life while retaining its natural heat, flavor, and aroma.",
     moq: "50kg",
     image: "/images/img_6.png"
+  },
+  {
+    id: 7,
+    name: "Oven dry king chilli",
+    description: "Premium oven-dried King Chilli flakes with intense heat, rich aroma, and natural flavor, ideal for spice blends, seasonings, sauces, and food manufacturing applications.",
+    moq: "50kg",
+    image: "/images/img_9.png"
   }
+
 ];

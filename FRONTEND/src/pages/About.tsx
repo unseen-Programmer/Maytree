@@ -101,8 +101,8 @@ const About = () => {
 
             <img
               src="/images/about-hero.png"
-              alt="Maitrayee Tea and Agro Manufacturing"
-              className="w-full h-[650px] object-cover rounded-[24px] shadow-2xl border border-[#b68d40]/20"
+              alt="Vintage black-and-white Assam tea processing scene with tea leaves, wooden press, and worker"
+              className="w-full h-auto max-h-[650px] lg:h-[650px] object-contain rounded-[24px] shadow-2xl border border-[#b68d40]/20 bg-neutral-950"
             />
 
             <div className="absolute -bottom-10 -left-10 bg-neutral-900/90 backdrop-blur-md p-8 rounded-xl border border-white/10 hidden md:block">
